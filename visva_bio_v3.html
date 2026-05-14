@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visva — Creative Soul</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0d0c14;
+  --deep:   #13111f;
+  --card:   #1a1828;
+  --gold:   #c9a84c;
+  --gold2:  #e8c97e;
+  --rose:   #e8a0a0;
+  --rose2:  #c76e6e;
+  --cream:  #f5f0e8;
+  --offwhite: #ede8dc;
+  --dim:    #7a7090;
+  --snap:   #FFFC00;
+  --insta:  #E1306C;
+  --white:  #ffffff;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--offwhite);
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom Cursor ── */
+.cursor-dot, .cursor-ring {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: opacity .3s;
+}
+.cursor-dot {
+  width: 7px; height: 7px;
+  background: var(--gold);
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(201,168,76,.5);
+  transition: transform .12s ease, width .3s, height .3s, border-color .3s;
+}
+body:hover .cursor-dot, body:hover .cursor-ring { opacity:1; }
+
+/* ── Grain overlay ── */
+body::before {
+  content:'';
+  position: fixed; inset:0; z-index:9000; pointer-events:none;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ════════════════════════════
+   HERO
+════════════════════════════ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  padding: 40px 20px 60px;
+  text-align: center;
+}
+
+/* animated mesh bg */
+.hero-mesh {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(201,168,76,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(199,110,110,.1) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(30,25,60,.8) 0%, transparent 100%);
+  animation: meshShift 12s ease-in-out infinite alternate;
+}
+@keyframes meshShift {
+  from { background-position: 0% 50%; }
+  to   {
+    background:
+      radial-gradient(ellipse 80% 60% at 75% 30%, rgba(201,168,76,.14) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 20% 75%, rgba(199,110,110,.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 50% 50%, rgba(30,25,60,.8) 0%, transparent 100%);
+  }
+}
+
+/* floating orbs */
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(60px); pointer-events: none; z-index: 0;
+  animation: float ease-in-out infinite alternate;
+}
+.orb1 { width:300px;height:300px; background:rgba(201,168,76,.08); top:-80px; left:-80px; animation-duration:9s; }
+.orb2 { width:200px;height:200px; background:rgba(199,110,110,.07); bottom:-60px; right:-40px; animation-duration:11s; animation-delay:-3s; }
+.orb3 { width:150px;height:150px; background:rgba(100,80,200,.07); top:40%; right:10%; animation-duration:13s; animation-delay:-6s; }
+@keyframes float { from{transform:translateY(0) scale(1)} to{transform:translateY(-30px) scale(1.08)} }
+
+/* ── thin horizontal lines ── */
+.hero-line {
+  position: absolute; left:0; right:0; height:1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,.2), transparent);
+  pointer-events:none; z-index:1;
+}
+.hero-line:nth-child(1){top:15%;}
+.hero-line:nth-child(2){bottom:20%;}
+
+/* ── hero content ── */
+.hero-tag {
+  position: relative; z-index:2;
+  display: inline-flex; align-items: center; gap:12px;
+  font-size: clamp(9px,2.2vw,11px);
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  opacity:0; animation: fadeUp .8s .1s ease forwards;
+}
+.hero-tag::before, .hero-tag::after {
+  content:''; width: 40px; height:1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.hero-tag::after { transform: scaleX(-1); }
+
+/* ── name ── */
+.hero-name-wrap {
+  position: relative; z-index:2;
+  opacity:0; animation: fadeUp .9s .25s ease forwards;
+}
+.hero-name-wrap h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(64px,16vw,130px);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -1px;
+  background: linear-gradient(160deg, var(--cream) 0%, var(--gold2) 40%, var(--cream) 60%, var(--rose) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+}
+
+/* mirror / reflection */
+.name-mirror {
+  display: block;
+  transform: scaleY(-.35) translateY(-6px);
+  opacity: .18;
+  filter: blur(2px);
+  background: linear-gradient(160deg, var(--cream), var(--gold2), var(--cream), var(--rose));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(64px,16vw,130px);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -1px;
+  pointer-events:none;
+}
+
+.hero-desc {
+  position: relative; z-index:2;
+  margin-top: 28px;
+  font-size: clamp(13px,3.2vw,17px);
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  color: rgba(237,232,220,.65);
+  max-width: 440px; margin-left:auto; margin-right:auto;
+  line-height: 1.9;
+  opacity:0; animation: fadeUp .9s .4s ease forwards;
+}
+.hero-desc em { color: var(--gold); font-style: italic; }
+
+/* ── hero scroll arrow ── */
+.scroll-hint {
+  position: relative; z-index:2;
+  margin-top: 56px;
+  display: flex; flex-direction:column; align-items:center; gap:10px;
+  opacity:0; animation: fadeUp 1s .7s ease forwards;
+}
+.scroll-hint span {
+  font-size:10px; letter-spacing:4px; color:var(--dim); text-transform:uppercase;
+}
+.arrow-line {
+  width:1px; height:50px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: arrowPulse 2s ease-in-out infinite;
+}
+@keyframes arrowPulse { 0%,100%{opacity:.3;transform:scaleY(.6)} 50%{opacity:1;transform:scaleY(1)} }
+
+/* ── floating diamond accent ── */
+.diamond {
+  position: absolute; z-index:2;
+  width:10px; height:10px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity:.6;
+  animation: float 6s ease-in-out infinite alternate;
+}
+.diamond:nth-child(1){top:18%;left:8%;animation-delay:0s;}
+.diamond:nth-child(2){top:72%;right:7%;animation-delay:-2s;width:6px;height:6px;opacity:.4;}
+.diamond:nth-child(3){top:45%;left:4%;animation-delay:-4s;width:5px;height:5px;opacity:.3;}
+
+/* ════════════════════════════
+   REVEAL
+════════════════════════════ */
+.reveal { opacity:0; transform:translateY(36px); transition: opacity .9s ease, transform .9s ease; }
+.reveal.up { opacity:1; transform:translateY(0); }
+
+/* ════════════════════════════
+   ABOUT SECTION
+════════════════════════════ */
+.section {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: clamp(60px,10vw,100px) clamp(20px,5vw,48px);
+}
+
+.section-label {
+  display: inline-flex; align-items:center; gap:12px;
+  font-size: clamp(9px,2vw,10px); letter-spacing:5px;
+  color: var(--gold); text-transform:uppercase;
+  margin-bottom: 20px;
+}
+.section-label::after { content:''; width:36px; height:1px; background:var(--gold); opacity:.5; }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px,6vw,52px);
+  font-weight: 700;
+  line-height:1.15;
+  color: var(--cream);
+  margin-bottom: 20px;
+}
+.section-title em { color:var(--gold); font-style:italic; }
+
+.section-body {
+  font-size: clamp(14px,2.5vw,16px);
+  font-weight:300; line-height:2;
+  color: rgba(237,232,220,.65);
+  max-width:560px;
+}
+.section-body strong { color:var(--cream); font-weight:500; }
+
+/* ── About layout ── */
+.about-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px,5vw,60px);
+  align-items: center;
+}
+@media(max-width:660px){ .about-layout{grid-template-columns:1fr;} }
+
+/* right side visual */
+.about-visual {
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.av-card {
+  position:relative;
+  width:100%; max-width:320px;
+  aspect-ratio:3/4;
+  background: linear-gradient(160deg, var(--card), #0f0d1e);
+  border:1px solid rgba(201,168,76,.15);
+  overflow:hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(201,168,76,.08);
+}
+.av-card-inner {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px;
+}
+.av-emoji-big {
+  font-size: clamp(72px,18vw,110px);
+  filter: drop-shadow(0 20px 40px rgba(201,168,76,.3));
+  animation: float 5s ease-in-out infinite alternate;
+}
+.av-name-card {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,5vw,32px);
+  color:var(--cream); letter-spacing:2px;
+}
+.av-sub {
+  font-size:10px; letter-spacing:4px; color:var(--gold); text-transform:uppercase;
+}
+
+/* card decorative corners */
+.av-card::before {
+  content:'';
+  position:absolute; top:16px; left:16px; right:16px; bottom:16px;
+  border:1px solid rgba(201,168,76,.1);
+  pointer-events:none;
+}
+.corner {
+  position:absolute; width:14px; height:14px;
+  border-color:var(--gold); border-style:solid; opacity:.5;
+}
+.corner.tl{top:8px;left:8px;border-width:1.5px 0 0 1.5px;}
+.corner.tr{top:8px;right:8px;border-width:1.5px 1.5px 0 0;}
+.corner.bl{bottom:8px;left:8px;border-width:0 0 1.5px 1.5px;}
+.corner.br{bottom:8px;right:8px;border-width:0 1.5px 1.5px 0;}
+
+/* shimmer over card */
+.av-card::after {
+  content:'';
+  position:absolute; top:-100%; left:-60%;
+  width:50%; height:300%;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);
+  animation:shimmer 5s 1s ease-in-out infinite;
+}
+@keyframes shimmer{0%{top:-100%;left:-60%}100%{top:-100%;left:160%}}
+
+/* gold line accent beside card */
+.av-line {
+  position:absolute; right:-20px; top:10%; bottom:10%;
+  width:2px;
+  background:linear-gradient(180deg,transparent,var(--gold),transparent);
+  opacity:.3;
+}
+@media(max-width:660px){ .av-line{display:none;} .av-card{max-width:260px;} }
+
+/* ── Trait pills ── */
+.traits {
+  display:flex; flex-wrap:wrap; gap:10px; margin-top:32px;
+}
+.trait {
+  padding:8px 18px;
+  border:1px solid rgba(201,168,76,.2);
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(237,232,220,.6);
+  background:rgba(201,168,76,.04);
+  transition:all .3s;
+}
+.trait:hover { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,.08); }
+
+/* ════════════════════════════
+   NUMBERS / STATS
+════════════════════════════ */
+.numbers-section {
+  background: linear-gradient(160deg, #110f20, #0d0c14);
+  border-top:1px solid rgba(201,168,76,.08);
+  border-bottom:1px solid rgba(201,168,76,.08);
+}
+
+.numbers-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:0;
+}
+.num-item {
+  padding:clamp(30px,5vw,50px) clamp(20px,4vw,40px);
+  border-right:1px solid rgba(201,168,76,.08);
+  text-align:center;
+  position:relative; overflow:hidden;
+  transition:background .4s;
+}
+.num-item:last-child{border-right:none;}
+.num-item:hover{background:rgba(201,168,76,.04);}
+.num-icon{font-size:clamp(24px,5vw,32px);margin-bottom:10px;display:block;}
+.num-val {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,7vw,52px);
+  font-weight:700; color:var(--gold);
+  line-height:1;
+}
+.num-label{
+  font-size:10px; letter-spacing:4px; color:var(--dim);
+  text-transform:uppercase; margin-top:8px; display:block;
+}
+@media(max-width:480px){.numbers-grid{grid-template-columns:1fr 1fr;}.num-item:nth-child(2){border-right:none;}.num-item:nth-child(3){border-top:1px solid rgba(201,168,76,.08);}.num-item:nth-child(4){border-top:1px solid rgba(201,168,76,.08);border-right:none;}}
+
+/* ════════════════════════════
+   QUOTE SECTION
+════════════════════════════ */
+.quote-section {
+  text-align:center;
+  padding: clamp(60px,10vw,120px) clamp(20px,8vw,80px);
+}
+.quote-mark {
+  font-family:'Playfair Display',serif;
+  font-size:120px; line-height:.6;
+  color:rgba(201,168,76,.12);
+  display:block; margin-bottom:20px;
+  font-weight:900;
+}
+.quote-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(22px,5vw,42px);
+  font-style:italic;
+  font-weight:300;
+  line-height:1.5;
+  color:var(--cream);
+  max-width:680px;
+  margin:0 auto;
+}
+.quote-text em { color:var(--gold); font-style:normal; font-weight:400; }
+.quote-attr {
+  margin-top:28px;
+  font-size:11px; letter-spacing:4px; color:var(--dim); text-transform:uppercase;
+  display:flex; align-items:center; justify-content:center; gap:16px;
+}
+.quote-attr::before,.quote-attr::after{content:'';width:40px;height:1px;background:rgba(201,168,76,.3);}
+
+/* ════════════════════════════
+   SOCIAL
+════════════════════════════ */
+.social-intro {
+  text-align:center;
+  padding-bottom:40px;
+}
+
+.socials-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));
+  gap:24px;
+}
+
+.scard {
+  position:relative;
+  text-decoration:none; color:inherit;
+  display:block;
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.05);
+  transition:transform .4s cubic-bezier(.16,.9,.3,1), box-shadow .4s;
+}
+.scard:hover{transform:translateY(-8px);}
+
+/* top image banner */
+.scard-banner {
+  height:clamp(120px,25vw,160px);
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.scard.snap-card .scard-banner{background:linear-gradient(135deg,#1a1800,#2e2600,#1a1400);}
+.scard.insta-card .scard-banner{background:linear-gradient(135deg,#1c0010,#280018,#120020);}
+
+/* large emoji icon */
+.scard-icon {
+  font-size:clamp(50px,12vw,72px);
+  position:relative; z-index:1;
+  animation:float 4s ease-in-out infinite alternate;
+  filter:drop-shadow(0 10px 30px rgba(0,0,0,.5));
+}
+
+/* blur glow blob behind icon */
+.icon-blob {
+  position:absolute; width:140px; height:140px; border-radius:50%;
+  filter:blur(50px); opacity:.5; z-index:0;
+}
+.snap-card .icon-blob{background:var(--snap);}
+.insta-card .icon-blob{background:var(--insta);}
+
+/* geometric deco lines in banner */
+.scard-banner::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    linear-gradient(45deg,transparent 48%,rgba(255,255,255,.02) 49%,rgba(255,255,255,.02) 51%,transparent 52%),
+    linear-gradient(-45deg,transparent 48%,rgba(255,255,255,.02) 49%,rgba(255,255,255,.02) 51%,transparent 52%);
+  background-size:30px 30px;
+}
+
+.scard-body{padding:clamp(18px,4vw,28px);}
+.scard-platform{
+  font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--dim); margin-bottom:8px;
+}
+.scard-handle{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(20px,5vw,28px);
+  font-weight:700; line-height:1.1;
+}
+.snap-card .scard-handle{color:var(--snap);}
+.insta-card .scard-handle{color:var(--insta);}
+
+.scard-tagline{
+  font-size:13px; font-weight:300; color:rgba(237,232,220,.5);
+  margin-top:8px; line-height:1.7;
+}
+
+.scard-btn{
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:20px;
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  padding:10px 20px;
+  font-weight:600;
+  transition:all .3s;
+  position:relative; overflow:hidden;
+}
+.scard-btn::before{
+  content:'';
+  position:absolute;left:-100%;top:0;width:100%;height:100%;
+  transition:left .4s;
+  opacity:.15;
+}
+.scard:hover .scard-btn::before{left:0;}
+.snap-card .scard-btn{border:1.5px solid var(--snap);color:var(--snap);}
+.snap-card .scard-btn::before{background:var(--snap);}
+.insta-card .scard-btn{border:1.5px solid var(--insta);color:var(--insta);}
+.insta-card .scard-btn::before{background:var(--insta);}
+
+.btn-arrow{transition:transform .3s;}
+.scard:hover .btn-arrow{transform:translateX(5px);}
+
+/* ── divider ── */
+.fancy-divider{
+  display:flex;align-items:center;gap:20px;
+  padding:0 clamp(20px,5vw,48px);
+  margin:0 auto; max-width:960px;
+}
+.fancy-divider::before,.fancy-divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.25),transparent);
+}
+.fancy-divider-icon{font-size:20px;opacity:.4;}
+
+/* ════════════════════════════
+   FOOTER
+════════════════════════════ */
+footer{
+  position:relative; overflow:hidden;
+  padding:clamp(60px,10vw,100px) 20px clamp(30px,5vw,50px);
+  text-align:center;
+  background:linear-gradient(180deg,var(--ink),#080710);
+  border-top:1px solid rgba(201,168,76,.08);
+}
+footer::before{
+  content:'VISVA';
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(80px,22vw,200px);
+  font-weight:900; letter-spacing:-5px;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(201,168,76,.04);
+  pointer-events:none;
+  user-select:none;
+}
+
+.footer-crown{
+  font-size:clamp(36px,8vw,52px);
+  margin-bottom:20px;display:block;
+  filter:drop-shadow(0 0 20px rgba(201,168,76,.3));
+}
+.footer-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,5vw,34px);
+  color:var(--cream); letter-spacing:3px;
+  margin-bottom:10px;
+}
+.footer-tagline{
+  font-size:11px;letter-spacing:5px;color:var(--dim);text-transform:uppercase;
+  margin-bottom:36px;
+}
+.footer-dots{display:flex;justify-content:center;gap:10px;margin-top:40px;}
+.fdot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(201,168,76,.25);
+  animation:pulse 2.5s ease-in-out infinite;
+}
+.fdot:nth-child(2){animation-delay:.3s;}
+.fdot:nth-child(3){animation-delay:.6s;background:rgba(199,110,110,.25);}
+.fdot:nth-child(4){animation-delay:.9s;}
+.fdot:nth-child(5){animation-delay:1.2s;}
+.footer-copy{
+  margin-top:36px;font-size:10px;letter-spacing:2px;
+  color:rgba(255,255,255,.1);
+}
+
+/* ════════════════════════════
+   SHARED ANIMATIONS
+════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.6)}}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="hero-line"></div>
+  <div class="hero-line"></div>
+  <div class="diamond"></div>
+  <div class="diamond"></div>
+  <div class="diamond"></div>
+
+  <div class="hero-tag">Creative &amp; Social</div>
+
+  <div class="hero-name-wrap">
+    <h1>Visva</h1>
+    <span class="name-mirror" aria-hidden="true">Visva</span>
+  </div>
+
+  <p class="hero-desc">
+    A creative soul from <em>Pudukkottai</em>. Storyteller, gamer &amp; maker of moments worth sharing.
+  </p>
+
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="arrow-line"></div>
+  </div>
+</section>
+
+<!-- ════════ ABOUT ════════ -->
+<div class="section">
+  <div class="about-layout">
+
+    <div class="about-left">
+      <div class="section-label reveal">About Me</div>
+      <h2 class="section-title reveal">A Mind That <em>Creates,</em> A Soul That <em>Connects.</em></h2>
+      <p class="section-body reveal">
+        Hey, I'm <strong>Visva</strong> — a guy who believes every day is a chance to create something that didn't exist yesterday. Whether it's gaming, making memories, or building connections, I show up fully. <strong>Curious by nature. Bold by choice.</strong> Always levelling up.
+      </p>
+      <div class="traits reveal">
+        <span class="trait">🎮 Gamer</span>
+        <span class="trait">✨ Creator</span>
+        <span class="trait">🌐 Social</span>
+        <span class="trait">🔥 Ambitious</span>
+        <span class="trait">🎯 Focused</span>
+        <span class="trait">👑 Original</span>
+      </div>
+    </div>
+
+    <div class="about-visual reveal">
+      <div class="av-card">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <div class="av-card-inner">
+          <span class="av-emoji-big">👑</span>
+          <span class="av-name-card">Visva</span>
+          <span class="av-sub">Creative · Pudukkottai</span>
+        </div>
+      </div>
+      <div class="av-line"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════ NUMBERS ════════ -->
+<div class="numbers-section">
+  <div style="max-width:960px;margin:0 auto;">
+    <div class="numbers-grid">
+      <div class="num-item reveal">
+        <span class="num-icon">🎮</span>
+        <span class="num-val">∞</span>
+        <span class="num-label">Hours Gamed</span>
+      </div>
+      <div class="num-item reveal">
+        <span class="num-icon">✨</span>
+        <span class="num-val">100%</span>
+        <span class="num-label">Real Vibes</span>
+      </div>
+      <div class="num-item reveal">
+        <span class="num-icon">🌍</span>
+        <span class="num-val">1</span>
+        <span class="num-label">Unique Soul</span>
+      </div>
+      <div class="num-item reveal">
+        <span class="num-icon">🔥</span>
+        <span class="num-val">24/7</span>
+        <span class="num-label">Grinding</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ QUOTE ════════ -->
+<div class="section quote-section reveal">
+  <span class="quote-mark" aria-hidden="true">"</span>
+  <p class="quote-text">
+    I don't wait for the right moment — I make <em>ordinary moments</em> unforgettable.
+  </p>
+  <div class="quote-attr">Visva</div>
+</div>
+
+<!-- ════════ DIVIDER ════════ -->
+<div class="fancy-divider reveal">
+  <span class="fancy-divider-icon">◆</span>
+</div>
+
+<!-- ════════ SOCIAL ════════ -->
+<div class="section">
+  <div class="social-intro reveal">
+    <div class="section-label" style="justify-content:center;">Let's Connect</div>
+    <h2 class="section-title" style="text-align:center;">Find Me in <em>Your World</em></h2>
+    <p style="text-align:center;font-size:clamp(13px,3vw,16px);font-weight:300;color:rgba(237,232,220,.5);max-width:420px;margin:0 auto;line-height:1.9;">
+      Two places, one person. Follow the journey — raw, real, and worth your time.
+    </p>
+  </div>
+
+  <div class="socials-grid">
+
+    <!-- Snapchat -->
+    <a class="scard snap-card reveal" href="https://snapchat.com/add/ashketchum_1254" target="_blank">
+      <div class="scard-banner">
+        <div class="icon-blob"></div>
+        <span class="scard-icon">👻</span>
+      </div>
+      <div class="scard-body">
+        <div class="scard-platform">Snapchat</div>
+        <div class="scard-handle">ashketchum_1254</div>
+        <div class="scard-tagline">Stories, snaps &amp; real-time moments. Add me and step into my world.</div>
+        <div class="scard-btn">Add Me <span class="btn-arrow">→</span></div>
+      </div>
+    </a>
+
+    <!-- Instagram -->
+    <a class="scard insta-card reveal" href="https://instagram.com/_wish_wow" target="_blank">
+      <div class="scard-banner">
+        <div class="icon-blob"></div>
+        <span class="scard-icon">📸</span>
+      </div>
+      <div class="scard-body">
+        <div class="scard-platform">Instagram</div>
+        <div class="scard-handle">_wish_wow</div>
+        <div class="scard-tagline">Curated moments, daily vibes &amp; the life behind the screen. Come say hi.</div>
+        <div class="scard-btn">Follow <span class="btn-arrow">→</span></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ════════ FOOTER ════════ -->
+<footer>
+  <span class="footer-crown">👑</span>
+  <div class="footer-name">Visva</div>
+  <div class="footer-tagline">Creative · Pudukkottai · Original</div>
+  <div class="fancy-divider" style="max-width:300px;">
+    <span class="fancy-divider-icon">◆</span>
+  </div>
+  <div class="footer-dots">
+    <div class="fdot"></div><div class="fdot"></div><div class="fdot"></div><div class="fdot"></div><div class="fdot"></div>
+  </div>
+  <div class="footer-copy">© 2025 Visva · All rights reserved</div>
+</footer>
+
+<script>
+/* ── Custom Cursor ── */
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  dot.style.left=mx+'px'; dot.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.scard,.trait,.num-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    ring.style.width='60px'; ring.style.height='60px';
+    ring.style.borderColor='rgba(201,168,76,.8)';
+    dot.style.opacity='0';
+  });
+  el.addEventListener('mouseleave',()=>{
+    ring.style.width='36px'; ring.style.height='36px';
+    ring.style.borderColor='rgba(201,168,76,.5)';
+    dot.style.opacity='1';
+  });
+});
+
+/* ── Scroll Reveal ── */
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('up');}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── Particle canvas background ── */
+const canvas = document.createElement('canvas');
+Object.assign(canvas.style,{position:'fixed',inset:0,zIndex:'0',pointerEvents:'none',opacity:'.6'});
+document.body.prepend(canvas);
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize(); window.addEventListener('resize',resize);
+const particles=[];
+for(let i=0;i<60;i++) particles.push({
+  x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+  vx:(Math.random()-.5)*.2, vy:-(Math.random()*.25+.05),
+  s:Math.random()*1.5+.3,
+  a:Math.random()*.25+.03,
+  c:Math.random()>.5?'201,168,76':'199,110,110'
+});
+(function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${p.c},${p.a})`; ctx.fill();
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.y<-5){p.y=canvas.height+5;p.x=Math.random()*canvas.width;}
+    if(p.x<0)p.x=canvas.width; if(p.x>canvas.width)p.x=0;
+  });
+  requestAnimationFrame(draw);
+})();
+
+/* ── Number counter animation ── */
+function animateCount(el, target, suffix=''){
+  const isInf = target===Infinity;
+  if(isInf){el.textContent='∞';return;}
+  let start=null;
+  const dur=1800;
+  function step(ts){
+    if(!start)start=ts;
+    const prog=Math.min((ts-start)/dur,1);
+    const val=Math.floor(prog*target);
+    el.textContent= val+(suffix);
+    if(prog<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+const numObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const vals=e.target.querySelectorAll('.num-val');
+      vals.forEach(v=>{
+        const t=v.textContent;
+        if(t==='∞'||t==='100%'||t==='1'||t==='24/7') return; // already set
+      });
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.numbers-grid').forEach(g=>numObs.observe(g));
+</script>
+</body>
+</html>
